@@ -21,7 +21,7 @@ def main():
     parser.add_argument(
         "--checkpoint",
         type=str,
-        default="pretrained/REMI-tempo/checkpoint",
+        default="pretrained/REMI-tempo-checkpoint",
         help="The path to a pretrained checkpoint."
     )
     parser.add_argument(
