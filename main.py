@@ -5,6 +5,9 @@ import os
 import argparse
 from datetime import datetime
 
+import numpy as np
+import tensorflow as tf
+
 from model import PopMusicTransformer
 
 
@@ -70,12 +73,22 @@ def main():
             " A random option is then picked among them."
         )
     )
+    parser.add_argument(
+        "--seed",
+        type=int,
+        default=None,
+        help="Random number generation seed."
+    )
     
     args = parser.parse_args()
     args = vars(args)
 
     if os.path.isdir(args["output_path"]):
         args["output_path"] = f"{args['output_path']}/{timestamp()}.midi"
+
+    if args["seed"] is not None:
+        np.random.seed(args["seed"])
+        tf.random.set_seed(args["seed"])
 
     model = PopMusicTransformer(
         checkpoint=args["checkpoint"],
