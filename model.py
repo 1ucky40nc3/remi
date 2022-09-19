@@ -4,7 +4,11 @@ import miditoolkit
 import modules
 import pickle
 import utils
-import time
+import 
+
+
+tf.compat.v1.disable_eager_execution()
+
 
 class PopMusicTransformer(object):
     ########################################
