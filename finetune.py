@@ -11,7 +11,9 @@ from model import PopMusicTransformer
 
 
 os.environ['CUDA_VISIBLE_DEVICES'] = '0'
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(
+    format='[%(asctime)s | %(levelname)s] %(message)s',
+    level=logging.INFO)
 
 
 def main():
