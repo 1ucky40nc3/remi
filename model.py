@@ -296,7 +296,7 @@ class PopMusicTransformer(object):
                     total_loss.append(loss_)
                 epoch_progress = i / num_batches * 100
                 logging.info(
-                    ' >>> Epoch: {} ({:.1f}%), Step: {}, Loss: {:.5f}, Time: {:.2f}'.format(
+                    ' >>> Epoch: {} ({:.1f} %), Step: {}, Loss: {:.5f}, Time: {:.2f}'.format(
                         e, epoch_progress, gs_, loss_, time.time() - st
                 ))
 
