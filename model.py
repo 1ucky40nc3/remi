@@ -274,7 +274,7 @@ class PopMusicTransformer(object):
         st = time.time()
         for e in range(num_epochs):
             total_loss = []
-            for i in tqdm(range(num_batches)):
+            for i in tqdm(range(num_batches), desc=f"Progress in epoch {e}/{num_epochs}"):
                 segments = training_data[self.batch_size*i:self.batch_size*(i+1)]
                 batch_m = [np.zeros((self.mem_len, self.batch_size, self.d_model), dtype=np.float32) for _ in range(self.n_layer)]
                 for j in range(self.group_size):
