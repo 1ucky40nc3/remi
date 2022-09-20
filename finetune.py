@@ -1,16 +1,60 @@
-from model import PopMusicTransformer
-from glob import glob
 import os
+import json
+import logging
+import argparse
+from glob import glob
+
+from model import PopMusicTransformer
+
+
 os.environ['CUDA_VISIBLE_DEVICES'] = '0'
+logging.basicConfig(level=logging.info)
+
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--checkpoint",
+        type=str,
+        default="./pretrained/REMI-tempo-checkpoint",
+        help="The path to a pretrained checkpoint."
+    )
+    parser.add_argument(
+        "--data_dir",
+        type=str,
+        default="./data/training",
+        help="Path to the training .midi files."
+    )
+    parser.add_argument(
+        "--output_dir",
+        type=str,
+        default="./outputs",
+        help=(
+            "Path to the output directory."
+            " This directory is also used to save checkpoints."
+        )
+    )
+    parser.add_argument(
+        "--num_epochs",
+        type=int,
+        default=200,
+        help="Number of training epochs."
+    )
+    args = parser.parse_args()
+    logging.info(f"The following config was set:\n{json.dumps(vars(args), indent=4)}")
+
     # declare model
+    logging.info("Starting to initialize model from checkpoint...")
     model = PopMusicTransformer(
-        checkpoint='REMI-tempo-checkpoint',
+        checkpoint=args.checkpoint,
         is_training=True)
+    logging.info("The model was successfully initialized...")
     # prepare data
-    midi_paths = glob('YOUR PERSOANL FOLDER/*.midi') # you need to revise it
+    midi_paths = glob(f'{args.data_dir}/*.midi') # you need to revise it
+    logging.info(f"Found {len(midi_paths)} in the `data_dir`: {args.data_dir}")
+    logging.info("Starting to prepare data...")
     training_data = model.prepare_data(midi_paths=midi_paths)
+    logging.info("Data preparation is done...")
 
     # check output checkpoint folder
     ####################################
@@ -20,14 +64,18 @@ def main():
     # if use "REMI-tempo-checkpoint"
     # for example: my-love, cute-doggy, ...
     ####################################
-    output_checkpoint_folder = 'REMI-finetune' # your decision
+    output_checkpoint_folder = args.output_dir # your decision
     if not os.path.exists(output_checkpoint_folder):
         os.mkdir(output_checkpoint_folder)
     
     # finetune
+    logging.info("Starting training loop...")
     model.finetune(
         training_data=training_data,
-        output_checkpoint_folder=output_checkpoint_folder)
+        output_checkpoint_folder=output_checkpoint_folder,
+        num_epochs=args.num_epochs)
+    logging.info("Training is completed...")
+
 
     ####################################
     # after finetuning, please choose which checkpoint you want to try
