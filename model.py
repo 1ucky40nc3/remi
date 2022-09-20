@@ -6,6 +6,9 @@ import pickle
 import utils
 import time
 
+from tqdm import tqdm
+import logging
+
 
 tf.compat.v1.disable_eager_execution()
 
@@ -271,7 +274,7 @@ class PopMusicTransformer(object):
         st = time.time()
         for e in range(num_epochs):
             total_loss = []
-            for i in range(num_batches):
+            for i in tqdm(range(num_batches)):
                 segments = training_data[self.batch_size*i:self.batch_size*(i+1)]
                 batch_m = [np.zeros((self.mem_len, self.batch_size, self.d_model), dtype=np.float32) for _ in range(self.n_layer)]
                 for j in range(self.group_size):
@@ -282,11 +285,21 @@ class PopMusicTransformer(object):
                     for m, m_np in zip(self.mems_i, batch_m):
                         feed_dict[m] = m_np
                     # run
-                    _, gs_, loss_, new_mem_ = self.sess.run([self.train_op, self.global_step, self.avg_loss, self.new_mem], feed_dict=feed_dict)
+                    _, gs_, loss_, new_mem_ = self.sess.run(
+                        [
+                            self.train_op, 
+                            self.global_step, 
+                            self.avg_loss, 
+                            self.new_mem
+                        ], 
+                        feed_dict=feed_dict)
                     batch_m = new_mem_
                     total_loss.append(loss_)
-                    print('>>> Epoch: {}, Step: {}, Loss: {:.5f}, Time: {:.2f}'.format(e, gs_, loss_, time.time()-st))
-            self.saver.save(self.sess, '{}/model-{:03d}-{:.3f}'.format(output_checkpoint_folder, e, np.mean(total_loss)))
+                    logging.info('>>> Epoch: {}, Step: {}, Loss: {:.5f}, Time: {:.2f}'.format(e, gs_, loss_, time.time()-st))
+
+            checkpoint_path = '{}/model-{:03d}-{:.3f}'.format(output_checkpoint_folder, e, np.mean(total_loss))
+            self.saver.save(self.sess, checkpoint_path)
+            logging.info(f"Saved checkpoint: {checkpoint_path}")
             # stop
             if np.mean(total_loss) <= 0.1:
                 break
