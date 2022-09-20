@@ -4,6 +4,9 @@ import logging
 import argparse
 from glob import glob
 
+import numpy as np
+import tensorflow as tf
+
 from model import PopMusicTransformer
 
 
@@ -40,8 +43,18 @@ def main():
         default=200,
         help="Number of training epochs."
     )
+    parser.add_argument(
+        "--seed",
+        type=int,
+        default=None,
+        help="Random number generation seed."
+    )
     args = parser.parse_args()
     logging.info(f"The following config was set:\n{json.dumps(vars(args), indent=4)}")
+
+    if args["seed"] is not None:
+        np.random.seed(args["seed"])
+        tf.random.set_seed(args["seed"])
 
     # declare model
     logging.info("Starting to initialize model from checkpoint...")
