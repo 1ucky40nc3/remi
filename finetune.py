@@ -64,7 +64,7 @@ def main():
     logging.info("The model was successfully initialized...")
     # prepare data
     midi_paths = glob(f'{args.data_dir}/*.midi') # you need to revise it
-    logging.info(f"Found {len(midi_paths)} in the `data_dir`: {args.data_dir}")
+    logging.info(f"Found {len(midi_paths)} with the pattern: {midi_paths}")
     logging.info("Starting to prepare data...")
     training_data = model.prepare_data(midi_paths=midi_paths)
     logging.info("Data preparation is done...")
