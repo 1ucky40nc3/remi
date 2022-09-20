@@ -295,7 +295,7 @@ class PopMusicTransformer(object):
                         feed_dict=feed_dict)
                     batch_m = new_mem_
                     total_loss.append(loss_)
-                    logging.info('>>> Epoch: {}, Step: {}, Loss: {:.5f}, Time: {:.2f}'.format(e, gs_, loss_, time.time()-st))
+                logging.info(' >>> Epoch: {}, Step: {}, Loss: {:.5f}, Time: {:.2f}'.format(e, gs_, loss_, time.time()-st))
 
             checkpoint_path = '{}/model-{:03d}-{:.3f}'.format(output_checkpoint_folder, e, np.mean(total_loss))
             self.saver.save(self.sess, checkpoint_path)
