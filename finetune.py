@@ -52,9 +52,9 @@ def main():
     args = parser.parse_args()
     logging.info(f"The following config was set:\n{json.dumps(vars(args), indent=4)}")
 
-    if args["seed"] is not None:
-        np.random.seed(args["seed"])
-        tf.random.set_seed(args["seed"])
+    if args.seed is not None:
+        np.random.seed(args.seed)
+        tf.random.set_seed(args.seed)
 
     # declare model
     logging.info("Starting to initialize model from checkpoint...")
