@@ -25,18 +25,21 @@ class Item(object):
         return 'Item(name={}, start={}, end={}, velocity={}, pitch={})'.format(
             self.name, self.start, self.end, self.velocity, self.pitch)
 
+READ_ERROR_MESSAGE = """
+The following file could not have been read:
+{file_path}
+Try to load it manually via:
+>>> import miditoolkit
+>>> midi_obj = miditoolkit.midi.parser.MidiFile(file_path)
+"""
+
+
 # read notes and tempo changes from midi (assume there is only one track)
 def read_items(file_path):
     try:
         midi_obj = miditoolkit.midi.parser.MidiFile(file_path)
     except:
-        print(f"""
-            The following file could not have been read:
-            {file_path}
-            Try to load it manually via:
-            >>> import miditoolkit
-            >>> midi_obj = miditoolkit.midi.parser.MidiFile(file_path)
-        """)
+        print(READ_ERROR_MESSAGE.format(file_path=file_path))
         return None
     # note
     note_items = []
