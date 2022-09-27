@@ -31,6 +31,12 @@ def main():
         help="Path to the training .midi files."
     )
     parser.add_argument(
+        "--file_pattern",
+        type=str,
+        default="*.midi",
+        help="Pattern to look for MIDI files with in `data_dir`."
+    )
+    parser.add_argument(
         "--output_dir",
         type=str,
         default="./outputs",
@@ -65,7 +71,7 @@ def main():
         is_training=True)
     logging.info("The model was successfully initialized...")
     # prepare data
-    pattern = f'{args.data_dir}/*.midi'
+    pattern = f'{args.data_dir}/{args.file_pattern}'
     midi_paths = glob(pattern) # you need to revise it
     logging.info(f"Found {len(midi_paths)} with the pattern: {pattern}")
     logging.info("Starting to prepare data...")
