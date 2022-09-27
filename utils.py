@@ -27,7 +27,16 @@ class Item(object):
 
 # read notes and tempo changes from midi (assume there is only one track)
 def read_items(file_path):
-    midi_obj = miditoolkit.midi.parser.MidiFile(file_path)
+    try:
+        midi_obj = miditoolkit.midi.parser.MidiFile(file_path)
+    except:
+        print(f"""
+            The following file could not have been read: \n{file_path}
+            Try to load it manually via:
+            >>> import miditoolkit
+            >>> midi_obj = miditoolkit.midi.parser.MidiFile(file_path)
+        """)
+        return None
     # note
     note_items = []
     notes = midi_obj.instruments[0].notes
