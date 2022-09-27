@@ -125,7 +125,10 @@ class PopMusicTransformer(object):
     # extract events for prompt continuation
     ########################################
     def extract_events(self, input_path):
-        note_items, tempo_items = utils.read_items(input_path)
+        items = utils.read_items(input_path)
+        if items is None:
+            return None
+        note_items, tempo_items = items
         note_items = utils.quantize_items(note_items)
         max_time = note_items[-1].end
         if 'chord' in self.checkpoint_path:
@@ -224,6 +227,8 @@ class PopMusicTransformer(object):
         all_events = []
         for path in midi_paths:
             events = self.extract_events(path)
+            if events is None:
+                continue
             all_events.append(events)
         # event to word
         all_words = []
