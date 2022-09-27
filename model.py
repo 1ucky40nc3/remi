@@ -129,7 +129,11 @@ class PopMusicTransformer(object):
         if items is None:
             return None
         note_items, tempo_items = items
-        note_items = utils.quantize_items(note_items)
+        try:
+            note_items = utils.quantize_items(note_items)
+        except:
+            print(f"Note items couldn't be quantized for: \n{input_path}")
+            return None
         max_time = note_items[-1].end
         if 'chord' in self.checkpoint_path:
             chord_items = utils.extract_chords(note_items)
