@@ -31,7 +31,8 @@ def read_items(file_path):
         midi_obj = miditoolkit.midi.parser.MidiFile(file_path)
     except:
         print(f"""
-            The following file could not have been read: \n{file_path}
+            The following file could not have been read:
+            {file_path}
             Try to load it manually via:
             >>> import miditoolkit
             >>> midi_obj = miditoolkit.midi.parser.MidiFile(file_path)
@@ -205,7 +206,7 @@ def item2event(groups):
                 elif tempo < DEFAULT_TEMPO_INTERVALS[0].start:
                     tempo_style = Event('Tempo Class', item.start, 'slow', None)
                     tempo_value = Event('Tempo Value', item.start, 0, None)
-                elif tempo > DEFAULT_TEMPO_INTERVALS[2].stop:
+                elif tempo >= DEFAULT_TEMPO_INTERVALS[2].stop:
                     tempo_style = Event('Tempo Class', item.start, 'fast', None)
                     tempo_value = Event('Tempo Value', item.start, 59, None)
                 events.append(tempo_style)
